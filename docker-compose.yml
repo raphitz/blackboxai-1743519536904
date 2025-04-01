@@ -1,0 +1,100 @@
+version: '3.8'
+
+services:
+  # Frontend Development Server
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./frontend:/app
+      - frontend_cache:/app/.dart_tool
+    environment:
+      - FLUTTER_WEB_PORT=8000
+      - FLUTTER_WEB_HOSTNAME=0.0.0.0
+    depends_on:
+      - backend
+
+  # Backend Development Server
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - backend_cache:/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+    depends_on:
+      - mysql
+      - dynamodb-local
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root_password_dev
+      - MYSQL_DATABASE=eventoando
+      - MYSQL_USER=eventoando
+      - MYSQL_PASSWORD=password_dev
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/db/init:/docker-entrypoint-initdb.d
+    command: --default-authentication-plugin=mysql_native_password
+
+  # DynamoDB Local
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "8000:8000"
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal/data"
+    volumes:
+      - dynamodb_data:/home/dynamodblocal/data
+
+  # LocalStack (AWS Services Emulator)
+  localstack:
+    image: localstack/localstack:latest
+    ports:
+      - "4566:4566"
+      - "4571:4571"
+    environment:
+      - SERVICES=s3,lambda,apigateway,cognito,events
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+    volumes:
+      - localstack_data:/tmp/localstack
+      - "/var/run/docker.sock:/var/run/docker.sock"
+
+  # Adminer (Database Management)
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=mysql
+    depends_on:
+      - mysql
+
+  # DynamoDB Admin UI
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin:latest
+    ports:
+      - "8001:8001"
+    environment:
+      - DYNAMO_ENDPOINT=http://dynamodb-local:8000
+    depends_on:
+      - dynamodb-local
+
+volumes:
+  mysql_data:
+  dynamodb_data:
+  localstack_data:
+  frontend_cache:
+  backend_cache:
