@@ -1,0 +1,111 @@
+# Flutter/Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# IDE - IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea_modules/
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# TypeScript
+*.tsbuildinfo
+dist/
+coverage/
+
+# AWS
+.aws/
+.aws-sam/
+packaged.yaml
+samconfig.toml
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!terraform.tfvars.example
+.terraformrc
+terraform.rc
+.terraform.lock.hcl
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# System Files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Project specific
+/frontend/.env
+/backend/.env
+.secrets/
+*.pem
+*.key
+*.crt
+*.p12
+
+# Build outputs
+/frontend/build/
+/backend/dist/
+/infrastructure/.terraform/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test coverage
+coverage/
+.nyc_output/
+junit.xml
+test-report.xml
+
+# Cache directories
+.cache/
+.temp/
+.tmp/
